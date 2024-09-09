@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background-color: #061417;
+    color: #f7f7f7;
+}
+
+.password__range {
+  width: 100%;
+  appearance: none;
+  height: 0.8rem;
+  background: #18171f;
+  background-image: linear-gradient(#34afcb, #34afcb);
+  background-size: 20% 100%;
+  background-repeat: no-repeat;
+}
+
+.password__range::-webkit-slider-thumb {
+  appearance: none;
+  width: 1.8rem;
+  height: 1.8rem;
+  background-color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid #fff;
+}
+
+.password__range::-webkit-slider-thumb:hover {
+  background-color: #18171f;
+  border-color: #34afcb;
+}

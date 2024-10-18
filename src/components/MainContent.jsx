@@ -10,6 +10,10 @@ const easyWords = [
     "melon",
     "berry",
     "kiwi",
+    "mouse",
+    "main",
+    "long",
+    "length",
     "lemon",
     "lime",
     "main",
@@ -59,7 +63,10 @@ const easyWords = [
     "giant",
     "picture",
     "spanish",
-    "edge"
+    "edge",
+    "broom",
+    "stick",
+    "write"
 ];
 
 const symbols = "!@#$%^&*()_+";

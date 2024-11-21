@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CopySvg from "./CopySvg";
 import Check from "./Check";
 import { generatePassword, evaluateStrength } from "./../main/passwordUtils"; // Import logic functions
@@ -15,10 +15,13 @@ function MainContent() {
     const [password, setPassword] = useState("");
     const [strength, setStrength] = useState(2); // 0&1: weak, 2: fair, 3: good, 4: strong 
     const [strengthMessage, setStrengthMessage] = useState("FAIR");
+    const [shuffling, setShuffling] = useState(false); // State to control the shuffle animation
+    const [displayedPassword, setDisplayedPassword] = useState(""); // Displaying the shuffled password
+    const [showCopiedPopup, setShowCopiedPopup] = useState(false); // State for the "Copied" popup
 
     // Handle range slider change
     const handleRangeChange = (e) => {
-        handleGeneratePassword ();
+        handleGeneratePassword();
         const rangeValue = e.target.value;
         setPasswordLength(parseInt(rangeValue));
 
@@ -33,13 +36,35 @@ function MainContent() {
 
     // Toggle checkbox state (only for the non-disabled ones)
     const toggleCheckbox = (type) => {
-         handleGeneratePassword();
+        handleGeneratePassword();
         if (type !== "lowerCase") {
             setCheckedStates((prevState) => ({
                 ...prevState,
                 [type]: !prevState[type],
             }));
         }
+    };
+
+    // Function to generate a random character for the shuffle effect
+    const getRandomChar = () => {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+        return chars.charAt(Math.floor(Math.random() * chars.length));
+    };
+
+    // Simulate the shuffling effect
+    const shufflePassword = (finalPassword) => {
+        const shuffleTimes = 6; // Number of "shuffle" steps
+        let currentShuffle = 0;
+        const interval = setInterval(() => {
+            setDisplayedPassword(
+                Array.from({ length: passwordLength }, () => getRandomChar()).join("")
+            );
+            currentShuffle++;
+            if (currentShuffle >= shuffleTimes) {
+                clearInterval(interval);
+                setDisplayedPassword(finalPassword); // Set the final password
+            }
+        }, 50); // Update every 50ms
     };
 
     // Generate password and evaluate its strength
@@ -50,6 +75,10 @@ function MainContent() {
         setPassword(newPassword);
         setStrength(score);
         setStrengthMessage(strengthMessage);
+
+        // Trigger the shuffle effect before displaying the final password
+        setShuffling(true);
+        shufflePassword(newPassword);
     };
 
     // Determine the strength bar class
@@ -71,6 +100,15 @@ function MainContent() {
         }
     };
 
+    // Function to handle copying to clipboard and show popup
+    const handleCopyPassword = () => {
+        navigator.clipboard.writeText(password); // Copy the password to clipboard
+        setShowCopiedPopup(true); // Show the popup
+        setTimeout(() => {
+            setShowCopiedPopup(false); // Hide the popup after 1 second
+        }, 1000);
+    };
+
     return (
         <main className="flex font-jetbrains justify-center items-center h-[99vh] text-center">
             <div>
@@ -79,13 +117,19 @@ function MainContent() {
                 </h3>
                 <div>
                     <div className="flex align-center justify-between bg-[#0c2930] py-3 px-4 w-[19rem]">
-                        <span>{password || "P@S$W0RD"}</span>
-                        <span
-                            onClick={() => navigator.clipboard.writeText(password)}
-                        >
+                        <span>{displayedPassword || "P@S$W0RD"}</span>
+                        <span onClick={handleCopyPassword}>
                             <CopySvg />
                         </span>
                     </div>
+
+                    {/* Copied Popup */}
+                    {showCopiedPopup && (
+                        <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-800 font-poppins text-[0.6rem] text-white px-4 py-2 rounded-2xl shadow-lg">
+                            Copied!
+                        </div>
+                    )}
+
                     <div className="my-4 bg-[#0c2930] py-3 px-4 w-[19rem]">
                         <div className="flex align-center justify-between my-3 ">
                             <span>Character Length </span>
@@ -170,7 +214,7 @@ function MainContent() {
                             onClick={handleGeneratePassword}
                         >
                             <span>GENERATE </span>
-                            <i className="fa fa-arrow-right"></i>
+                          <i className="fa fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>

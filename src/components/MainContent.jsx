@@ -6,7 +6,7 @@ import { generatePassword, evaluateStrength } from "./../main/passwordUtils"; //
 function MainContent() {
     const [checkedStates, setCheckedStates] = useState({
         upperCase: false,
-        lowerCase: true, // Always true, can't be toggled
+        lowerCase: true, // Always true, can't be toggled 
         numbers: false,
         symbols: false,
         easyToRemember: true, 
@@ -21,7 +21,7 @@ function MainContent() {
 
     // Handle range slider change
     const handleRangeChange = (e) => {
-        handleGeneratePassword();
+        
         const rangeValue = e.target.value;
         setPasswordLength(parseInt(rangeValue));
 
@@ -32,17 +32,19 @@ function MainContent() {
                 (rangeInput.max - rangeInput.min)) *
             100;
         rangeInput.style.backgroundSize = `${value}% 100%`;
+        handleGeneratePassword();
     };
 
     // Toggle checkbox state (only for the non-disabled ones)
     const toggleCheckbox = (type) => {
-        handleGeneratePassword();
         if (type !== "lowerCase") {
             setCheckedStates((prevState) => ({
                 ...prevState,
                 [type]: !prevState[type],
             }));
         }
+    
+      handleGeneratePassword();
     };
 
     // Function to generate a random character for the shuffle effect

@@ -13,7 +13,7 @@ function MainContent() {
     });
     const [passwordLength, setPasswordLength] = useState(8);
     const [password, setPassword] = useState("");
-    const [strength, setStrength] = useState(2); // 0: weak, 1: fair, 2: good, 3: strong
+    const [strength, setStrength] = useState(2); // 0&1: weak, 2: fair, 3: good, 4: strong 
     const [strengthMessage, setStrengthMessage] = useState("FAIR");
 
     // Handle range slider change
@@ -55,13 +55,14 @@ function MainContent() {
     // Determine the strength bar class
     const getStrengthClass = (barNumber) => {
         if (strength >= barNumber) {
-            if (strength < 2) {
+            // 0&1: weak, 2: fair, 3: good, 4: strong 
+            if (strength <= 1) {
                 return "bg-red-500 border-red-500"; // Weak
-            } else if (strength === 2 || strength === 3) {
+            } else if (strength === 2) {
                 return "bg-yellow-500 border-yellow-500"; // Fair
-            } else if (strength === 4) {
-                return "bg-green-500 border-green-500"; // Good
-            } else if (strength >= 5) {
+            } else if (strength === 3) {
+                return "bg-emerald-500 border-emerald-500"; // Good
+            } else if (strength >= 4) {
                 return "bg-green-500 border-green-500"; // Strong
             }
         }

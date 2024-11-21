@@ -2,7 +2,7 @@ import React from "react";
 
 function CopySvg() {
     return (
-        <svg className="fill-[#34afcb] hover:fill-black active:fill-black"
+        <svg className="fill-[#34afcb]"
             xmlns="http://www.w3.org/2000/svg"
             width="23"
             height="23"
